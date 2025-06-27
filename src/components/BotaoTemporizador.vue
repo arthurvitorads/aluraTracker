@@ -27,14 +27,23 @@ export default defineComponent({
             descricaoLimpa: false
         }
     },
+    props: {
+      descricao: {
+        type: String,
+        default: ''
+      }
+    },
     methods: {
         iniciar () {
-            this.cronometroRodando = true
-            this.cronometro = setInterval(() => {
-            this.tempoEmSegundos += 1     
-            this.$emit('atualizaTempoEmSegundos', this.tempoEmSegundos)   
-            }, 1000)
-
+            if(this.descricao.length != 0){
+                this.cronometroRodando = true
+                this.cronometro = setInterval(() => {
+                this.tempoEmSegundos += 1     
+                this.$emit('atualizaTempoEmSegundos', this.tempoEmSegundos)   
+                }, 1000)
+            }else{
+                alert("Insira a tarefa para iniciar!")
+            }
         },
         finalizar () {
                 this.cronometroRodando = false

@@ -3,9 +3,9 @@
       <div class="is-flex is-align-items-center is-justify-content-space-between" id="test">
       <Cronometro :tempoEmSegundos ="tempoEmSegundos"/>
       <BotaoTemporizador
+      :descricao = "descricao"
       @atualizaTempoEmSegundos = "updateTemp"
-      @clicouBotaoFinalizar = "buttonClick"
-      @atualizaDescricao="atualizaDescricao"/>
+      @clicouBotaoFinalizar = "buttonClick"/>
       </div>
     </div>
 </template>
@@ -22,6 +22,12 @@ export default defineComponent({
       Cronometro: Cronometro,
       BotaoTemporizador: BotaoTemporizador
     },
+    props: {
+      descricao: {
+        type: String,
+        default: ''
+      }
+    },
     data() {
       return {
         tempoEmSegundos: 0,
@@ -31,9 +37,6 @@ export default defineComponent({
     methods: {
       updateTemp(newtemp) {
         this.tempoEmSegundos = newtemp
-      },
-      atualizaDescricao(newDesc) {
-        this.descricao = newDesc
       },
       buttonClick(button) {
       try {
