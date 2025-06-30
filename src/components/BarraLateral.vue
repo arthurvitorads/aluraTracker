@@ -6,11 +6,13 @@
       <button class="button" @click="alterarTema">
         {{ textoBotao }}
       </button>
+      <NavLateral/>
   </header>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import NavLateral from './navLateral.vue'
 
 export default defineComponent({
   name: 'BarraLateral',
