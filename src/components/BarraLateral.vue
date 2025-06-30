@@ -22,6 +22,9 @@ export default defineComponent({
       modoEscuroAtivo: false
     }
   },
+  components:{
+    NavLateral: NavLateral
+  },
   computed: {
     textoBotao () {
       if (this.modoEscuroAtivo) {
