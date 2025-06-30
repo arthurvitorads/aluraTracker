@@ -22,10 +22,11 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { defineComponent } from "vue";
 import Temporizador from './Temporizador.vue'
 import { useStore } from "vuex";
 import { key } from "@/store";
+import ITarefa from "@/interfaces/ITarefa";
 
 export default defineComponent({
   name: "Formulário",
@@ -41,22 +42,42 @@ export default defineComponent({
   },
   methods: {
     finalizarTarefa(tempoDecorrido: number): void {
-      this.$emit('aoSalvarTarefa', {
-        duracaoEmSegundos: tempoDecorrido,
+      const projetoSelecionado = this.store.state.projetos.find(
+        proj => proj.id === this.idProjeto
+      )
+
+      if (!projetoSelecionado) {
+        alert('Selecione um projeto antes de salvar a tarefa!')
+        return
+      }
+
+      const tarefa: ITarefa = {
         descricao: this.descricao,
-        projeto: this.projetos.find(proj => proj.id == this.idProjeto)
-      })
+        duracaoEmSegundos: tempoDecorrido,
+        projeto: projetoSelecionado,
+        projetoId: this.idProjeto
+      }
+
+      this.$emit('aoSalvarTarefa', tarefa)
+
       this.descricao = ''
+      this.idProjeto = ''
+    }
+  },
+  computed: {
+    projetos() {
+      return this.store.state.projetos
     }
   },
   setup() {
     const store = useStore(key)
     return {
-      projetos: computed(() => store.state.projetos)
+      store
     }
   }
 });
 </script>
+
 <style>
 .formulario {
   color: var(--texto-primario);

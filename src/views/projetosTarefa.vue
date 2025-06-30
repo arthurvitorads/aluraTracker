@@ -13,22 +13,22 @@
                     Salvar
                 </button>
             </div>
-            <TabelaProjetos :projetos="projetos"/>
+            <TabelaProjetos :projetos="projetos" @selecionarProjeto="selecionarProjeto" />
         </form>
     </section>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import IProjetos from '../interfaces/IProjetos'
+import { computed, defineComponent } from 'vue';
 import TabelaProjetos from '@/components/tabelaProjetos.vue';
+import { useStore } from '@/store';
+import IProjeto from '@/interfaces/IProjetos' // Corrigir nome do import
 export default defineComponent({
     name: 'projetosTarefa',
-
-    data(){
+    events: ['salvarProjeto'],
+    data() {
         return {
             nomeDoProjeto: '',
-            projetos: [] as IProjetos []
         }
     },
 
@@ -37,16 +37,26 @@ export default defineComponent({
     },
 
     methods: {
-        salvar(){
-            const projetos : IProjetos = {
-                nome: this.nomeDoProjeto,
-                id: new Date().toISOString()
-            }
-            this.projetos.push(projetos)
+        salvar() {
+            this.$emit('salvarProjeto', this.nomeDoProjeto)
+            this.store.commit('ADICIONA_PROJETO', this.nomeDoProjeto)
             this.nomeDoProjeto = ''
-            console.log(projetos)
+
+        },
+        selecionarProjeto(projeto: IProjeto) {
+            this.store.commit('SELECIONAR_PROJETO', projeto)
+            this.$router.push('/')
+        }
+
+    },
+    setup() {
+        const store = useStore()
+        return {
+            store,
+            projetos: computed(() => store.state.projetos)
         }
     }
+
 })
 
 
